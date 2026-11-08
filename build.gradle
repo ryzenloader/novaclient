@@ -38,3 +38,24 @@ java {
 	}
 	withSourcesJar()
 }
+
+tasks.register('dumpMethods') {
+	doLast {
+		def urls = sourceSets.main.compileClasspath.files.collect { it.toURI().toURL() } as URL[]
+		def loader = new URLClassLoader(urls, ClassLoader.systemClassLoader.parent)
+		def cl = loader.loadClass('net.minecraft.client.multiplayer.MultiPlayerGameMode')
+		println '=== MultiPlayerGameMode METHODS ==='
+		cl.methods.each { m ->
+			if (m.name.contains('Click') || m.name.contains('Inventory') || m.name.contains('handle')) {
+				println '  ' + m.name + '(' + (m.parameterTypes.collect { it.name }.join(', ')) + ') : ' + m.returnType.name
+			}
+		}
+		println '=== LocalPlayer METHODS ==='
+		def lp = loader.loadClass('net.minecraft.client.player.LocalPlayer')
+		lp.methods.each { m ->
+			if (m.name.contains('Message') || m.name.contains('display') || m.name.contains('send')) {
+				println '  ' + m.name + '(' + (m.parameterTypes.collect { it.name }.join(', ')) + ') : ' + m.returnType.name
+			}
+		}
+	}
+}
