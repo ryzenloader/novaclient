@@ -1,0 +1,18 @@
+{
+  "key.novaclient.open_gui": "Open Nova GUI",
+  "key.category.novaclient.main": "Nova Client",
+  "key.novaclient.module.kill_aura": "Toggle Kill Aura",
+  "key.novaclient.module.aim_assist": "Toggle Aim Assist",
+  "key.novaclient.module.trigger_bot": "Toggle Trigger Bot",
+  "key.novaclient.module.auto_totem": "Toggle Auto Totem",
+  "key.novaclient.module.sprint": "Toggle Sprint",
+  "key.novaclient.module.fly": "Toggle Fly",
+  "key.novaclient.module.scaffold": "Toggle Scaffold",
+  "key.novaclient.module.step": "Toggle Step",
+  "key.novaclient.module.auto_tool": "Toggle Auto Tool",
+  "key.novaclient.module.chest_stealer": "Toggle Chest Stealer",
+  "key.novaclient.module.auto_respawn": "Toggle Auto Respawn",
+  "key.novaclient.module.fullbright": "Toggle Fullbright",
+  "key.novaclient.module.esp": "Toggle ESP",
+  "key.novaclient.module.hud": "Toggle HUD"
+}
