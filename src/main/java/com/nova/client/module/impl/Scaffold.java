@@ -3,6 +3,7 @@ package com.nova.client.module.impl;
 import com.nova.client.module.Module;
 import com.nova.client.setting.BoolSetting;
 import com.nova.client.setting.NumberSetting;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
@@ -62,7 +63,7 @@ public class Scaffold extends Module {
 
 	@Override
 	public void onTick() {
-		Player p = mc.player;
+		LocalPlayer p = mc.player;
 		if (mc.screen != null) return;
 
 		if (p.onGround() && !mc.options.keyJump.isDown()) {

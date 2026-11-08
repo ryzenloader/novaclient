@@ -38,13 +38,3 @@ java {
 	}
 	withSourcesJar()
 }
-
-tasks.register('dumpMethods') {
-	doLast {
-		def urls = sourceSets.main.compileClasspath.files.collect { it.toURI().toURL() } as URL[]
-		def loader = new URLClassLoader(urls, ClassLoader.systemClassLoader.parent)
-		def ci = loader.loadClass('net.minecraft.world.inventory.ContainerInput')
-		println '=== ContainerInput FIELDS / CONSTANTS ==='
-		ci.fields.each { f -> println '  ' + f.name + ' : ' + f.type.name }
-	}
-}

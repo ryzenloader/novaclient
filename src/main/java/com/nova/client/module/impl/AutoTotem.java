@@ -1,7 +1,7 @@
 package com.nova.client.module.impl;
 
 import com.nova.client.module.Module;
-import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.inventory.ContainerInput;
 import net.minecraft.world.item.Items;
 
 /** Keeps a Totem of Undying in your offhand. */
@@ -19,7 +19,7 @@ public class AutoTotem extends Module {
 		var menu = p.inventoryMenu;
 		for (int slot = 9; slot <= 44; slot++) {
 			if (menu.getSlot(slot).getItem().is(Items.TOTEM_OF_UNDYING)) {
-				mc.gameMode.handleInventoryMouseClick(menu.containerId, slot, 40, ClickType.SWAP, p);
+				mc.gameMode.handleContainerInput(menu.containerId, slot, 40, ContainerInput.SWAP, p);
 				return;
 			}
 		}

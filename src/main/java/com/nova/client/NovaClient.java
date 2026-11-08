@@ -64,8 +64,8 @@ public class NovaClient implements ClientModInitializer {
 					module.toggle();
 					ConfigManager.save(modules);
 					if (mc.player != null) {
-						mc.player.displayClientMessage(Component.literal(
-							module.getName() + (module.isEnabled() ? " enabled" : " disabled")), true);
+						mc.player.sendOverlayMessage(Component.literal(
+							module.getName() + (module.isEnabled() ? " enabled" : " disabled")));
 					}
 				}
 			});

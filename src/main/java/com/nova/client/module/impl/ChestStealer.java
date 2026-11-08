@@ -3,7 +3,7 @@ package com.nova.client.module.impl;
 import com.nova.client.module.Module;
 import com.nova.client.setting.NumberSetting;
 import net.minecraft.client.gui.screens.inventory.ContainerScreen;
-import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.inventory.ContainerInput;
 
 /** Quick-moves every item out of an open chest. */
 public class ChestStealer extends Module {
@@ -23,7 +23,7 @@ public class ChestStealer extends Module {
 		int containerSlots = menu.slots.size() - 36;
 		for (int i = 0; i < containerSlots; i++) {
 			if (!menu.getSlot(i).getItem().isEmpty()) {
-				mc.gameMode.handleInventoryMouseClick(menu.containerId, i, 0, ClickType.QUICK_MOVE, mc.player);
+				mc.gameMode.handleContainerInput(menu.containerId, i, 0, ContainerInput.QUICK_MOVE, mc.player);
 				cooldown = delay.getInt();
 				return;
 			}
