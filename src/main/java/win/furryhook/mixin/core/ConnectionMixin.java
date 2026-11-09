@@ -17,11 +17,11 @@ public abstract class ConnectionMixin {
       if (!PacketEventManager.hasSendListeners()) {
          original.call(new Object[]{packet, listener, flush});
       } else {
-         PacketSendEvent event = PacketEventManager.callSendPre((Connection)this, packet);
+         PacketSendEvent event = PacketEventManager.callSendPre((Connection)(Object)this, packet);
          if (!event.isCancelled()) {
             Packet<?> dispatchedPacket = event.getPacket();
             original.call(new Object[]{dispatchedPacket, listener, flush});
-            PacketEventManager.callSendPost((Connection)this, dispatchedPacket);
+            PacketEventManager.callSendPost((Connection)(Object)this, dispatchedPacket);
          }
       }
    }
@@ -30,9 +30,9 @@ public abstract class ConnectionMixin {
    private void wrapReceive(ChannelHandlerContext context, Packet<?> packet, Operation<Void> original) {
       if (!PacketEventManager.hasReceiveListeners()) {
          original.call(new Object[]{context, packet});
-      } else if (!PacketEventManager.callReceivePre((Connection)this, packet)) {
+      } else if (!PacketEventManager.callReceivePre((Connection)(Object)this, packet)) {
          original.call(new Object[]{context, packet});
-         PacketEventManager.callReceivePost((Connection)this, packet);
+         PacketEventManager.callReceivePost((Connection)(Object)this, packet);
       }
    }
 }

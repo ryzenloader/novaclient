@@ -40,7 +40,7 @@ public abstract class GuiMixin {
       GuiGraphicsExtractor guiGraphicsExtractor
    ) {
       if (EventManager.hasListeners(FinalGuiRenderEvent.class)) {
-         EventManager.call(Events.FINAL_GUI_RENDER.set(this.minecraft, (Gui)this, guiGraphicsExtractor, deltaTracker, renderHud, renderScreen, mouseX, mouseY));
+         EventManager.call(Events.FINAL_GUI_RENDER.set(this.minecraft, (Gui)(Object)this, guiGraphicsExtractor, deltaTracker, renderHud, renderScreen, mouseX, mouseY));
       }
    }
 

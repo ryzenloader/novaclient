@@ -49,7 +49,7 @@ public abstract class ScreenMixin {
    @Inject(method = "onClose", at = @At("HEAD"), cancellable = true)
    private void onClose(CallbackInfo ci) {
       if (EventManager.hasListeners(ScreenCloseEvent.class)) {
-         if (EventManager.call(Events.SCREEN_CLOSE.set(this.minecraft, (Screen)this)).isCancelled()) {
+         if (EventManager.call(Events.SCREEN_CLOSE.set(this.minecraft, (Screen)(Object)this)).isCancelled()) {
             ci.cancel();
          }
       }
@@ -58,7 +58,7 @@ public abstract class ScreenMixin {
    @Inject(method = "extractRenderState", at = @At("HEAD"), cancellable = true)
    private void onExtractRenderState(GuiGraphicsExtractor guiGraphicsExtractor, int mouseX, int mouseY, float partialTick, CallbackInfo ci) {
       if (EventManager.hasListeners(ScreenRenderEvent.class)) {
-         if (EventManager.call(Events.SCREEN_RENDER.set((Screen)this, guiGraphicsExtractor, mouseX, mouseY, partialTick)).isCancelled()) {
+         if (EventManager.call(Events.SCREEN_RENDER.set((Screen)(Object)this, guiGraphicsExtractor, mouseX, mouseY, partialTick)).isCancelled()) {
             ci.cancel();
          }
       }
@@ -77,7 +77,7 @@ public abstract class ScreenMixin {
    @Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
    private void onKeyPressed(KeyEvent keyEvent, CallbackInfoReturnable<Boolean> cir) {
       if (EventManager.hasListeners(ScreenKeyEvent.class)) {
-         if (EventManager.call(Events.SCREEN_KEY.set((Screen)this, keyEvent, ScreenKeyEvent.Action.PRESS)).isCancelled()) {
+         if (EventManager.call(Events.SCREEN_KEY.set((Screen)(Object)this, keyEvent, ScreenKeyEvent.Action.PRESS)).isCancelled()) {
             cir.setReturnValue(true);
          }
       }
@@ -86,7 +86,7 @@ public abstract class ScreenMixin {
    @Inject(method = "init()V", at = @At("TAIL"))
    private void furryhook$markContainerOpened(CallbackInfo ci) {
       if (AnimationsFeature.usesContainerAnimation()) {
-         if (this instanceof AbstractContainerScreen<?> handledScreen && handledScreen != furryhook$animatedContainerScreen) {
+         if ((Object)this instanceof AbstractContainerScreen<?> handledScreen && handledScreen != furryhook$animatedContainerScreen) {
             furryhook$animatedContainerScreen = handledScreen;
             furryhook$containerAnimationStartNanos = System.nanoTime();
          }
@@ -95,7 +95,7 @@ public abstract class ScreenMixin {
 
    @Inject(method = "extractRenderStateWithTooltipAndSubtitles", at = @At("HEAD"))
    private void furryhook$pushContainerAnimation(GuiGraphicsExtractor context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
-      if (this instanceof AbstractContainerScreen<?> handledScreen && AnimationsFeature.usesContainerAnimation()) {
+      if ((Object)this instanceof AbstractContainerScreen<?> handledScreen && AnimationsFeature.usesContainerAnimation()) {
          float progress = furryhook$containerAnimationProgress(handledScreen);
          if (progress >= 0.999F) {
             this.furryhook$containerTransformApplied = false;
@@ -118,7 +118,7 @@ public abstract class ScreenMixin {
 
    @Inject(method = "extractBackground", at = @At("HEAD"))
    private void furryhook$disableAnimationForDarkening(GuiGraphicsExtractor context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
-      if (this.furryhook$containerTransformApplied && this instanceof AbstractContainerScreen) {
+      if (this.furryhook$containerTransformApplied && (Object)this instanceof AbstractContainerScreen) {
          context.pose().popMatrix();
          this.furryhook$backgroundBypassApplied = true;
       } else {
@@ -128,7 +128,7 @@ public abstract class ScreenMixin {
 
    @Inject(method = "extractBackground", at = @At("RETURN"))
    private void furryhook$restoreAnimationAfterDarkening(GuiGraphicsExtractor context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
-      if (this.furryhook$backgroundBypassApplied && this instanceof AbstractContainerScreen) {
+      if (this.furryhook$backgroundBypassApplied && (Object)this instanceof AbstractContainerScreen) {
          context.pose().pushMatrix();
          context.pose().translate(this.furryhook$containerCenterX, this.furryhook$containerCenterY + this.furryhook$containerOffsetY);
          context.pose().scale(this.furryhook$containerScale, this.furryhook$containerScale);

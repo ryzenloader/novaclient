@@ -40,7 +40,7 @@ public abstract class MinecraftMixin {
    @Inject(method = "onGameLoadFinished", at = @At("TAIL"))
    private void onClientStart(GameLoadCookie gameLoadCookie, CallbackInfo ci) {
       if (EventManager.hasListeners(ClientStartEvent.class)) {
-         EventManager.call(Events.CLIENT_START.set((Minecraft)this));
+         EventManager.call(Events.CLIENT_START.set((Minecraft)(Object)this));
       }
    }
 
@@ -49,7 +49,7 @@ public abstract class MinecraftMixin {
       if (!this.furryhook$runningTimerTick && TimerFeature.shouldSkipBaseTick()) {
          ci.cancel();
       } else if (EventManager.hasListeners(GameTickEvent.class)) {
-         Minecraft client = (Minecraft)this;
+         Minecraft client = (Minecraft)(Object)this;
          EventManager.call(Events.GAME_TICK.set(client, TICK_CONTEXT.begin(client)));
       }
    }
@@ -60,7 +60,7 @@ public abstract class MinecraftMixin {
          this.furryhook$runningTimerTick = true;
 
          try {
-            ((Minecraft)this).tick();
+            ((Minecraft)(Object)this).tick();
          } finally {
             this.furryhook$runningTimerTick = false;
          }
@@ -78,7 +78,7 @@ public abstract class MinecraftMixin {
    @Inject(method = "startAttack", at = @At("HEAD"), cancellable = true)
    private void onAttack(CallbackInfoReturnable<Boolean> cir) {
       if (EventManager.hasListeners(AttackEvent.class)) {
-         if (EventManager.call(Events.ATTACK.set((Minecraft)this)).isCancelled()) {
+         if (EventManager.call(Events.ATTACK.set((Minecraft)(Object)this)).isCancelled()) {
             cir.setReturnValue(false);
          }
       }
@@ -91,7 +91,7 @@ public abstract class MinecraftMixin {
 
    @Inject(method = "setLevel", at = @At("TAIL"))
    private void onSetLevel(ClientLevel level, CallbackInfo ci) {
-      Minecraft client = (Minecraft)this;
+      Minecraft client = (Minecraft)(Object)this;
       ClientLevel previous = this.previousLevel;
       if (level == null) {
          RotationContext.clear();
@@ -109,13 +109,13 @@ public abstract class MinecraftMixin {
    @Inject(method = "disconnect(Lnet/minecraft/client/gui/screens/Screen;ZZ)V", at = @At("HEAD"))
    private void onDisconnect(Screen screen, boolean transferring, boolean resetting, CallbackInfo ci) {
       if (EventManager.hasListeners(DisconnectEvent.class)) {
-         EventManager.call(Events.DISCONNECT.set((Minecraft)this, screen, transferring, resetting));
+         EventManager.call(Events.DISCONNECT.set((Minecraft)(Object)this, screen, transferring, resetting));
       }
    }
 
    @Inject(method = "setScreenAndShow", at = @At("HEAD"), cancellable = true)
    private void onSetScreen(Screen screen, CallbackInfo ci) {
-      Minecraft client = (Minecraft)this;
+      Minecraft client = (Minecraft)(Object)this;
       if (screen != null && EventManager.hasListeners(ScreenOpenEvent.class)) {
          if (EventManager.call(Events.SCREEN_OPEN.set(client, screen)).isCancelled()) {
             ci.cancel();
@@ -126,14 +126,14 @@ public abstract class MinecraftMixin {
    @Inject(method = "stop", at = @At("HEAD"))
    private void onShutdown(CallbackInfo ci) {
       if (EventManager.hasListeners(ShutdownEvent.class)) {
-         EventManager.call(Events.SHUTDOWN.set((Minecraft)this));
+         EventManager.call(Events.SHUTDOWN.set((Minecraft)(Object)this));
       }
    }
 
    @Inject(method = "onResourceLoadFinished", at = @At("TAIL"))
    private void onResourceReload(GameLoadCookie gameLoadCookie, CallbackInfo ci) {
       if (EventManager.hasListeners(ResourceReloadEvent.class)) {
-         EventManager.call(Events.RESOURCE_RELOAD.set((Minecraft)this));
+         EventManager.call(Events.RESOURCE_RELOAD.set((Minecraft)(Object)this));
       }
    }
 }

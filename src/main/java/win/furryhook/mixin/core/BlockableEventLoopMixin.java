@@ -20,7 +20,7 @@ public abstract class BlockableEventLoopMixin {
          if (overlayStart >= 0L) {
             Minecraft mc = Minecraft.getInstance();
             if (mc != null) {
-               if (this == mc) {
+               if ((Object)this == mc) {
                   if (mc.level == null && mc.getConnection() == null) {
                      if (Util.getMillis() - overlayStart < 3000L) {
                         ci.cancel();

@@ -673,7 +673,7 @@ public final class TargetElement extends HudElement {
       float largestArea = 0.0F;
 
       for (ModelPart candidate : part.getAllParts()) {
-         for (Cube cube : ((ModelPartAccessor)candidate).furryhook$getCubes()) {
+         for (Cube cube : ((ModelPartAccessor)(Object)candidate).furryhook$getCubes()) {
             for (Polygon polygon : cube.polygons) {
                if (!(polygon.normal().z() > -0.9F)) {
                   float minU = Float.POSITIVE_INFINITY;

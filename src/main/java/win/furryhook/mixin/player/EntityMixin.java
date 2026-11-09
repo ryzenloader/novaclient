@@ -13,7 +13,7 @@ import win.furryhook.feature.impl.movement.NoPushFeature;
 public abstract class EntityMixin {
    @Inject(method = "push(Lnet/minecraft/world/entity/Entity;)V", at = @At("HEAD"), cancellable = true)
    private void cancelEntityPush(Entity entity, CallbackInfo ci) {
-      if (NoPushFeature.shouldCancelEntityPush((Entity)this, entity)) {
+      if (NoPushFeature.shouldCancelEntityPush((Entity)(Object)this, entity)) {
          ci.cancel();
       }
    }
@@ -21,7 +21,7 @@ public abstract class EntityMixin {
    @Inject(method = "getPickRadius", at = @At("RETURN"), cancellable = true)
    private void expandPickRadius(CallbackInfoReturnable<Float> cir) {
       HitBoxesFeature hitBoxes = HitBoxesFeature.getEnabled();
-      if (hitBoxes != null && hitBoxes.appliesTo((Entity)this)) {
+      if (hitBoxes != null && hitBoxes.appliesTo((Entity)(Object)this)) {
          cir.setReturnValue((Float)cir.getReturnValue() + (float)hitBoxes.getHorizontalExpansion());
       }
    }

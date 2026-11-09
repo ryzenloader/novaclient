@@ -13,7 +13,7 @@ import win.furryhook.utils.render.world.DynamicLightManager;
 public abstract class BlockLightEngineMixin {
    @ModifyExpressionValue(method = "getEmission", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;getLightEmission()I"))
    private int virtualDynamicLight(int original, long packedPos, BlockState state) {
-      return !(((LightEngineAccessor)this).getChunkSource() instanceof ClientChunkCache)
+      return !(((LightEngineAccessor)(Object)this).getChunkSource() instanceof ClientChunkCache)
          ? original
          : Math.max(original, DynamicLightManager.virtualLuminance(packedPos));
    }

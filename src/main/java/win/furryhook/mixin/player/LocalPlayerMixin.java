@@ -32,13 +32,13 @@ public abstract class LocalPlayerMixin {
    @Inject(method = "tick", at = @At("HEAD"))
    private void onTickPre(CallbackInfo ci) {
       if (EventManager.hasListeners(PlayerTickEvent.class)) {
-         EventManager.call(Events.PLAYER_TICK.set((LocalPlayer)this, PlayerTickEvent.Phase.PRE));
+         EventManager.call(Events.PLAYER_TICK.set((LocalPlayer)(Object)this, PlayerTickEvent.Phase.PRE));
       }
    }
 
    @Inject(method = "tick", at = @At("TAIL"))
    private void onTickPost(CallbackInfo ci) {
-      LocalPlayer player = (LocalPlayer)this;
+      LocalPlayer player = (LocalPlayer)(Object)this;
       LocalPlayerHistory.record(player);
       if (EventManager.hasListeners(PlayerTickEvent.class)) {
          EventManager.call(Events.PLAYER_TICK.set(player, PlayerTickEvent.Phase.POST));
@@ -47,21 +47,21 @@ public abstract class LocalPlayerMixin {
 
    @Inject(method = "moveTowardsClosestSpace(DD)V", at = @At("HEAD"), cancellable = true)
    private void cancelClosestSpacePush(double x, double z, CallbackInfo ci) {
-      if (NoPushFeature.shouldCancelClosestSpacePush((LocalPlayer)this)) {
+      if (NoPushFeature.shouldCancelClosestSpacePush((LocalPlayer)(Object)this)) {
          ci.cancel();
       }
    }
 
    @Inject(method = "itemUseSpeedMultiplier", at = @At("HEAD"), cancellable = true)
    private void removeItemUseSlowdown(CallbackInfoReturnable<Float> cir) {
-      if (NoSlowFeature.shouldBypassSlowdown((LocalPlayer)this)) {
+      if (NoSlowFeature.shouldBypassSlowdown((LocalPlayer)(Object)this)) {
          cir.setReturnValue(1.0F);
       }
    }
 
    @Inject(method = "isSlowDueToUsingItem", at = @At("HEAD"), cancellable = true)
    private void keepSprintingWhileUsingItem(CallbackInfoReturnable<Boolean> cir) {
-      if (NoSlowFeature.shouldBypassSlowdown((LocalPlayer)this)) {
+      if (NoSlowFeature.shouldBypassSlowdown((LocalPlayer)(Object)this)) {
          cir.setReturnValue(false);
       }
    }
@@ -82,7 +82,7 @@ public abstract class LocalPlayerMixin {
          AuraFeature aura = FeatureManager.INSTANCE.getEnabled(AuraFeature.class);
          if (aura != null && aura.clientLook.getValue() && aura.getTarget() != null) {
             Entity target = aura.getTarget();
-            LocalPlayer player = (LocalPlayer)this;
+            LocalPlayer player = (LocalPlayer)(Object)this;
             Vec3 visualEye = player.getEyePosition(partialTick);
             Vec3 visualTarget = target.getPosition(partialTick).add(0.0, target.getBbHeight() * 0.5, 0.0);
             float visualYaw = (float)Math.toDegrees(Math.atan2(-(visualTarget.x - visualEye.x), visualTarget.z - visualEye.z));
@@ -114,7 +114,7 @@ public abstract class LocalPlayerMixin {
          AuraFeature aura = FeatureManager.INSTANCE.getEnabled(AuraFeature.class);
          if (aura != null && aura.clientLook.getValue() && aura.getTarget() != null) {
             Entity target = aura.getTarget();
-            LocalPlayer player = (LocalPlayer)this;
+            LocalPlayer player = (LocalPlayer)(Object)this;
             Vec3 visualEye = player.getEyePosition(partialTick);
             Vec3 visualTarget = target.getPosition(partialTick).add(0.0, target.getBbHeight() * 0.5, 0.0);
             double visualDist = Math.hypot(visualTarget.x - visualEye.x, visualTarget.z - visualEye.z);

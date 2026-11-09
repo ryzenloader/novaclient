@@ -20,6 +20,8 @@ dependencies {
 	implementation "net.fabricmc:fabric-loader:${project.loader_version}"
 	implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
+	compileOnly "com.google.code.findbugs:jsr305:3.0.2"
+
 	implementation "com.github.weisj:jsvg:2.1.0"
 	implementation "io.github.llamalad7:mixinextras-fabric:0.4.1"
 	annotationProcessor "io.github.llamalad7:mixinextras-fabric:0.4.1"

@@ -18,14 +18,14 @@ public abstract class PlayerMixin {
       cancellable = true
    )
    private void cancelBlockPush(BlockState state, Vec3 multiplier, CallbackInfo ci) {
-      if (NoPushFeature.shouldCancelBlockPush((Player)this, state)) {
+      if (NoPushFeature.shouldCancelBlockPush((Player)(Object)this, state)) {
          ci.cancel();
       }
    }
 
    @Inject(method = "isPushedByFluid()Z", at = @At("HEAD"), cancellable = true)
    private void cancelFluidPush(CallbackInfoReturnable<Boolean> cir) {
-      if (NoPushFeature.shouldCancelFluidPush((Player)this)) {
+      if (NoPushFeature.shouldCancelFluidPush((Player)(Object)this)) {
          cir.setReturnValue(false);
       }
    }

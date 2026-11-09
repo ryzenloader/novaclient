@@ -109,10 +109,10 @@ public abstract class GameRendererMixin {
    @Inject(method = "renderLevel", at = @At("TAIL"))
    private void onRender3D(DeltaTracker deltaTracker, CallbackInfo ci) {
       if (EventManager.hasListeners(Render3DEvent.class)) {
-         RenderContext.enter3D((GameRenderer)this, deltaTracker);
+         RenderContext.enter3D((GameRenderer)(Object)this, deltaTracker);
 
          try {
-            EventManager.call(Events.RENDER_3D.set(this.minecraft, (GameRenderer)this, deltaTracker));
+            EventManager.call(Events.RENDER_3D.set(this.minecraft, (GameRenderer)(Object)this, deltaTracker));
          } finally {
             RenderContext.exit3D();
          }

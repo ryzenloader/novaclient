@@ -59,7 +59,7 @@ public abstract class ChatScreenMixin extends Screen {
 
    @Inject(method = "handleChatInput", at = @At("HEAD"), cancellable = true)
    private void handleClientCommand(String message, boolean addToRecentChat, CallbackInfo ci) {
-      ChatScreen screen = (ChatScreen)this;
+      ChatScreen screen = (ChatScreen)(Object)this;
       String normalized = screen.normalizeChatMessage(message);
       if (CommandManager.INSTANCE.handleChat(normalized)) {
          if (addToRecentChat) {
@@ -79,7 +79,7 @@ public abstract class ChatScreenMixin extends Screen {
    private void focusInputAfterClick() {
       Minecraft client = Minecraft.getInstance();
       client.execute(() -> {
-         if (client.gui.screen() == (ChatScreen)this) {
+         if (client.gui.screen() == (ChatScreen)(Object)this) {
             this.setFocused(this.input);
             this.input.setFocused(true);
          }

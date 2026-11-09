@@ -12,7 +12,7 @@ import win.furryhook.feature.impl.movement.NoPushFeature;
 public abstract class FishingHookMixin {
    @Inject(method = "pullEntity(Lnet/minecraft/world/entity/Entity;)V", at = @At("HEAD"), cancellable = true)
    private void cancelFishingHookPull(Entity entity, CallbackInfo ci) {
-      if (NoPushFeature.shouldCancelFishingHookPull((FishingHook)this, entity)) {
+      if (NoPushFeature.shouldCancelFishingHookPull((FishingHook)(Object)this, entity)) {
          ci.cancel();
       }
    }

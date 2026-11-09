@@ -17,7 +17,7 @@ import win.furryhook.event.events.screen.ScreenMouseButtonEvent;
 public interface ContainerEventHandlerMixin {
    @Inject(method = "keyReleased", at = @At("HEAD"), cancellable = true)
    private void onKeyReleased(KeyEvent keyEvent, CallbackInfoReturnable<Boolean> cir) {
-      if (this instanceof Screen screen && EventManager.hasListeners(ScreenKeyEvent.class)) {
+      if ((Object)this instanceof Screen screen && EventManager.hasListeners(ScreenKeyEvent.class)) {
          if (EventManager.call(Events.SCREEN_KEY.set(screen, keyEvent, ScreenKeyEvent.Action.RELEASE)).isCancelled()) {
             cir.setReturnValue(true);
          }
@@ -26,7 +26,7 @@ public interface ContainerEventHandlerMixin {
 
    @Inject(method = "mouseClicked", at = @At("HEAD"), cancellable = true)
    private void onMouseClicked(MouseButtonEvent mouseButtonEvent, boolean doubleClick, CallbackInfoReturnable<Boolean> cir) {
-      if (this instanceof Screen screen && EventManager.hasListeners(ScreenMouseButtonEvent.class)) {
+      if ((Object)this instanceof Screen screen && EventManager.hasListeners(ScreenMouseButtonEvent.class)) {
          if (EventManager.call(Events.SCREEN_MOUSE_BUTTON.set(screen, mouseButtonEvent, ScreenMouseButtonEvent.Action.CLICK, 0.0, 0.0)).isCancelled()) {
             cir.setReturnValue(true);
          }
@@ -35,7 +35,7 @@ public interface ContainerEventHandlerMixin {
 
    @Inject(method = "mouseReleased", at = @At("HEAD"), cancellable = true)
    private void onMouseReleased(MouseButtonEvent mouseButtonEvent, CallbackInfoReturnable<Boolean> cir) {
-      if (this instanceof Screen screen && EventManager.hasListeners(ScreenMouseButtonEvent.class)) {
+      if ((Object)this instanceof Screen screen && EventManager.hasListeners(ScreenMouseButtonEvent.class)) {
          if (EventManager.call(Events.SCREEN_MOUSE_BUTTON.set(screen, mouseButtonEvent, ScreenMouseButtonEvent.Action.RELEASE, 0.0, 0.0)).isCancelled()) {
             cir.setReturnValue(true);
          }
@@ -44,7 +44,7 @@ public interface ContainerEventHandlerMixin {
 
    @Inject(method = "mouseDragged", at = @At("HEAD"), cancellable = true)
    private void onMouseDragged(MouseButtonEvent mouseButtonEvent, double dragX, double dragY, CallbackInfoReturnable<Boolean> cir) {
-      if (this instanceof Screen screen && EventManager.hasListeners(ScreenMouseButtonEvent.class)) {
+      if ((Object)this instanceof Screen screen && EventManager.hasListeners(ScreenMouseButtonEvent.class)) {
          if (EventManager.call(Events.SCREEN_MOUSE_BUTTON.set(screen, mouseButtonEvent, ScreenMouseButtonEvent.Action.DRAG, dragX, dragY)).isCancelled()) {
             cir.setReturnValue(true);
          }

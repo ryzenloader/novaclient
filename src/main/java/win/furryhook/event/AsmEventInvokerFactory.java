@@ -26,7 +26,7 @@ public final class AsmEventInvokerFactory {
             try {
                invoker.invokeExact((Object)target, (Event)event);
             } catch (Throwable throwable) {
-               throw new AsmEventInvokerFactory.EventInvocationException(throwablex);
+               throw new AsmEventInvokerFactory.EventInvocationException(throwable);
             }
          };
       } catch (Throwable throwable) {

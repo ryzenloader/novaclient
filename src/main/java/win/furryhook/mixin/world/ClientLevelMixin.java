@@ -35,7 +35,7 @@ public abstract class ClientLevelMixin {
    @Inject(method = "update", at = @At("TAIL"))
    private void restoreDynamicLightsAfterPackets(CallbackInfo ci) {
       if (this.hadQueuedLightUpdates) {
-         DynamicLightManager.INSTANCE.revalidateAfterVanillaUpdates((ClientLevel)this);
+         DynamicLightManager.INSTANCE.revalidateAfterVanillaUpdates((ClientLevel)(Object)this);
       }
    }
 
@@ -95,7 +95,7 @@ public abstract class ClientLevelMixin {
    @Inject(method = "removeEntity", at = @At("HEAD"))
    private void onEntityRemoved(int entityId, RemovalReason reason, CallbackInfo ci) {
       if (reason == RemovalReason.KILLED) {
-         ClientLevel level = (ClientLevel)this;
+         ClientLevel level = (ClientLevel)(Object)this;
          if (level.getEntity(entityId) instanceof LivingEntity living && EventManager.hasListeners(EntityDeathEvent.class)) {
             EventManager.call(Events.ENTITY_DEATH.set(living));
          }

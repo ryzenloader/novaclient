@@ -55,7 +55,7 @@ public abstract class KeyboardInputMixin extends ClientInput {
       }
 
       if (EventManager.hasListeners(PlayerInputEvent.class)) {
-         PlayerInputEvent event = EventManager.call(new PlayerInputEvent((KeyboardInput)this, this.keyPresses, this.getMoveVector()));
+         PlayerInputEvent event = EventManager.call(new PlayerInputEvent((KeyboardInput)(Object)this, this.keyPresses, this.getMoveVector()));
          this.keyPresses = event.getKeyPresses();
          this.moveVector = event.getMoveVector();
       }

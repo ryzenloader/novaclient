@@ -54,7 +54,7 @@ public enum MiningToolProfile {
          MiningToolProfile enchantmentProfile = STANDARD;
 
          for (Entry<Holder<Enchantment>> entry : stack.getEnchantments().entrySet()) {
-            String id = ((Holder)entry.getKey()).unwrapKey().map(key -> key.identifier().toString()).orElse("");
+            String id = (String)((Holder)entry.getKey()).unwrapKey().map(key -> String.valueOf(((net.minecraft.resources.ResourceKey)key).location())).orElse("");
             String description = ((Enchantment)((Holder)entry.getKey()).value()).description().getString();
             if (EconomyTextParser.containsAny(id + " " + description, "bulldozer", "бульдозер")) {
                if (entry.getIntValue() >= 2) {

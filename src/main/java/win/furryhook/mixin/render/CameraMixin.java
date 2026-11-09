@@ -39,7 +39,7 @@ public abstract class CameraMixin {
 
    @Inject(method = "alignWithEntity", at = @At("HEAD"))
    private void onAlignWithEntity(float partialTick, CallbackInfo ci) {
-      Camera camera = (Camera)this;
+      Camera camera = (Camera)(Object)this;
       Entity entity = camera.entity();
       if (entity != null) {
          RotationContext.applyRenderInterpolation();

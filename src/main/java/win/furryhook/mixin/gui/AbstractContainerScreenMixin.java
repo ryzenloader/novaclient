@@ -18,7 +18,7 @@ public abstract class AbstractContainerScreenMixin {
    @Inject(method = "extractSlot", at = @At("TAIL"))
    private void renderAuctionRank(GuiGraphicsExtractor graphics, Slot slot, int mouseX, int mouseY, CallbackInfo ci) {
       if (slot != null && slot.hasItem()) {
-         AbstractContainerScreen<?> screen = (AbstractContainerScreen<?>)this;
+         AbstractContainerScreen<?> screen = (AbstractContainerScreen<?>)(Object)this;
          int color = AuctionHelperFeature.slotOverlayColor(screen.getTitle().getString(), slot.getItem());
          if (color != 0) {
             graphics.fill(slot.x, slot.y, slot.x + 16, slot.y + 16, color);
@@ -28,7 +28,7 @@ public abstract class AbstractContainerScreenMixin {
 
    @Inject(method = "getTooltipFromContainerItem", at = @At("RETURN"), cancellable = true)
    private void augmentAuctionTooltip(ItemStack stack, CallbackInfoReturnable<List<Component>> cir) {
-      AbstractContainerScreen<?> screen = (AbstractContainerScreen<?>)this;
+      AbstractContainerScreen<?> screen = (AbstractContainerScreen<?>)(Object)this;
       cir.setReturnValue(AuctionHelperFeature.augmentTooltip(screen.getTitle().getString(), stack, (List<Component>)cir.getReturnValue()));
    }
 }

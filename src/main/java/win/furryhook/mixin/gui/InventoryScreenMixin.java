@@ -19,8 +19,8 @@ public abstract class InventoryScreenMixin extends Screen {
 
    @Inject(method = "init", at = @At("TAIL"))
    private void addDropAllButton(CallbackInfo ci) {
-      AbstractContainerScreenAccessor accessor = (AbstractContainerScreenAccessor)this;
-      Button button = Button.builder(Component.literal("Выбросить всё"), ignored -> DropAllInventoryController.toggle((InventoryScreen)this))
+      AbstractContainerScreenAccessor accessor = (AbstractContainerScreenAccessor)(Object)this;
+      Button button = Button.builder(Component.literal("Выбросить всё"), ignored -> DropAllInventoryController.toggle((InventoryScreen)(Object)this))
          .bounds((this.width - 110) / 2, Math.max(4, accessor.getTopPos() - 24), 110, 20)
          .build();
       this.addRenderableWidget(button);

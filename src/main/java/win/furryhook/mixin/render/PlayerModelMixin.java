@@ -20,7 +20,7 @@ public abstract class PlayerModelMixin {
    private void furryhook$applyEmotePose(AvatarRenderState state, CallbackInfo ci) {
       EnumMap<EmotePart, float[]> pose = ((EmotePoseCarrier)state).furryhook$getEmotePose();
       if (pose != null) {
-         HumanoidModelAccessor accessor = (HumanoidModelAccessor)this;
+         HumanoidModelAccessor accessor = (HumanoidModelAccessor)(Object)this;
 
          for (Entry<EmotePart, float[]> entry : pose.entrySet()) {
             ModelPart part = switch ((EmotePart)entry.getKey()) {
