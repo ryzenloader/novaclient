@@ -2,6 +2,7 @@ package com.nova.client.module.impl;
 
 import com.nova.client.module.Module;
 import com.nova.client.setting.BoolSetting;
+import com.nova.client.setting.ModeSetting;
 import com.nova.client.setting.NumberSetting;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
@@ -22,11 +23,10 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
- * Places blocks under you while you move.
- * It looks a few ticks ahead along your motion so the block is there before you reach the edge,
- * can place several blocks per tick, extends further ahead (Expand), keeps your height (Keep Y),
- * and always picks the biggest valid block stack in your hotbar.
- * Holding jump builds a tower straight up.
+ * Places blocks under you as you walk, with realistic bridging styles:
+ * - Ninja: Angles head down backwards and auto-sneaks at the block edge
+ * - Godbridge: Locks head angle down at the placing seam for high-speed bridging
+ * - Normal: Standard placement
  */
 public class Scaffold extends Module {
 	private static final Direction[] SUPPORT_ORDER = {
@@ -34,6 +34,7 @@ public class Scaffold extends Module {
 	};
 	private static final double REACH = 4.5;
 
+	private final ModeSetting style = mode("Style", "Ninja", "Ninja", "Godbridge", "Normal");
 	private final NumberSetting expand = number("Expand", 0, 0, 5, 1);
 	private final NumberSetting perTick = number("Blocks per tick", 1, 1, 3, 1);
 	private final BoolSetting keepY = bool("Keep Y", false);
@@ -42,6 +43,7 @@ public class Scaffold extends Module {
 
 	private int previousSlot = -1;
 	private int lockedY;
+	private boolean sneaked;
 
 	public Scaffold() {
 		super("Scaffold", "Places blocks under you as you walk", Category.MOVEMENT);
@@ -49,8 +51,10 @@ public class Scaffold extends Module {
 
 	@Override
 	protected void onEnable() {
-		previousSlot = mc.player.getInventory().getSelectedSlot();
-		lockedY = mc.player.blockPosition().getY();
+		if (mc.player != null) {
+			previousSlot = mc.player.getInventory().getSelectedSlot();
+			lockedY = mc.player.blockPosition().getY();
+		}
 	}
 
 	@Override
@@ -58,13 +62,17 @@ public class Scaffold extends Module {
 		if (mc.player != null && previousSlot >= 0 && switchBack.get()) {
 			mc.player.getInventory().setSelectedSlot(previousSlot);
 		}
+		if (sneaked && mc.options != null) {
+			mc.options.keyShift.setDown(false);
+			sneaked = false;
+		}
 		previousSlot = -1;
 	}
 
 	@Override
 	public void onTick() {
 		LocalPlayer p = mc.player;
-		if (mc.screen != null) return;
+		if (mc.screen != null || p == null || mc.level == null) return;
 
 		if (p.onGround() && !mc.options.keyJump.isDown()) {
 			lockedY = p.blockPosition().getY();
@@ -72,6 +80,18 @@ public class Scaffold extends Module {
 
 		int slot = bestBlockSlot();
 		if (slot < 0) return;
+
+		// Ninja bridging style auto-sneak at the edge of the block
+		if (style.is("Ninja") && p.onGround()) {
+			BlockPos below = BlockPos.containing(p.getX(), p.getY() - 0.5, p.getZ());
+			if (mc.level.getBlockState(below).isAir()) {
+				mc.options.keyShift.setDown(true);
+				sneaked = true;
+			} else if (sneaked) {
+				mc.options.keyShift.setDown(false);
+				sneaked = false;
+			}
+		}
 
 		int placed = 0;
 		boolean switched = false;
@@ -81,6 +101,16 @@ public class Scaffold extends Module {
 
 			BlockHitResult hit = findSupport(p, target);
 			if (hit == null) continue;
+
+			// Make the avatar angle head down towards the placement face (bridging style, not flat plane)
+			if (!style.is("Normal")) {
+				double dx = hit.getLocation().x - p.getX();
+				double dz = hit.getLocation().z - p.getZ();
+				float yaw = (float) (Math.toDegrees(Math.atan2(dz, dx))) - 90.0F;
+				float pitch = style.is("Godbridge") ? 76.5F : 80.0F;
+				p.setYRot(yaw);
+				p.setXRot(pitch);
+			}
 
 			if (!switched) {
 				p.getInventory().setSelectedSlot(slot);

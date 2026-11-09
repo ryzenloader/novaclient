@@ -7,6 +7,7 @@ import com.nova.client.setting.BoolSetting;
 import com.nova.client.setting.ModeSetting;
 import com.nova.client.setting.NumberSetting;
 import com.nova.client.setting.Setting;
+import com.nova.client.util.SoundUtil;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
@@ -71,6 +72,7 @@ public class ClickGuiScreen extends Screen {
 
 	@Override
 	protected void init() {
+		SoundUtil.play("intro.wav");
 		dynamic.clear();
 		placed.clear();
 
@@ -97,6 +99,7 @@ public class ClickGuiScreen extends Screen {
 		for (Module.Category category : Module.Category.values()) {
 			Button b = Button.builder(Component.empty(), btn -> {
 				selected = category;
+				SoundUtil.play("dropdown.wav");
 				searchText = "";
 				search.setValue("");
 				scroll = 0;
@@ -166,20 +169,34 @@ public class ClickGuiScreen extends Screen {
 			}
 			dirty = true;
 		}).bounds(x, y, w - 54, MOD_H).build();
-		Button toggle = Button.builder(Component.empty(), b -> m.toggle())
-			.bounds(x + w - 50, y, 50, MOD_H).build();
+		Button toggle = Button.builder(Component.empty(), b -> {
+			m.toggle();
+			SoundUtil.play(m.isEnabled() ? "pop.wav" : "pop2.wav");
+		}).bounds(x + w - 50, y, 50, MOD_H).build();
 		track(main);
 		track(toggle);
 	}
 
 	private void addSettingButtons(Setting s, int x, int y, int w, int h) {
 		if (s instanceof BoolSetting bs) {
-			track(Button.builder(Component.empty(), b -> bs.toggle()).bounds(x, y, w, h).build());
+			track(Button.builder(Component.empty(), b -> {
+				bs.toggle();
+				SoundUtil.play("pop3.wav");
+			}).bounds(x, y, w, h).build());
 		} else if (s instanceof ModeSetting ms) {
-			track(Button.builder(Component.empty(), b -> ms.cycle()).bounds(x, y, w, h).build());
+			track(Button.builder(Component.empty(), b -> {
+				ms.cycle();
+				SoundUtil.play("hover.wav");
+			}).bounds(x, y, w, h).build());
 		} else if (s instanceof NumberSetting ns) {
-			track(Button.builder(Component.empty(), b -> ns.decrease()).bounds(x + w - 74, y + 2, 20, h - 4).build());
-			track(Button.builder(Component.empty(), b -> ns.increase()).bounds(x + w - 24, y + 2, 20, h - 4).build());
+			track(Button.builder(Component.empty(), b -> {
+				ns.decrease();
+				SoundUtil.play("hover.wav");
+			}).bounds(x + w - 74, y + 2, 20, h - 4).build());
+			track(Button.builder(Component.empty(), b -> {
+				ns.increase();
+				SoundUtil.play("hover.wav");
+			}).bounds(x + w - 24, y + 2, 20, h - 4).build());
 		}
 	}
 

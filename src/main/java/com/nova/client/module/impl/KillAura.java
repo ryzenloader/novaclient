@@ -15,6 +15,7 @@ public class KillAura extends Module {
 	private final NumberSetting range = number("Range", 3.0, 2.0, 6.0, 0.1);
 	private final ModeSetting targets = mode("Targets", "Players", "Players", "Mobs", "All");
 	private final ModeSetting sort = mode("Sort", "Distance", "Distance", "Health");
+	private final BoolSetting requireVisible = bool("Require line of sight", true);
 	private final BoolSetting swing = bool("Swing", true);
 
 	public KillAura() {
@@ -24,7 +25,8 @@ public class KillAura extends Module {
 	@Override
 	public void onTick() {
 		var player = mc.player;
-		if (mc.screen != null || player.getAttackStrengthScale(0f) < 0.95f) return;
+		if (mc.screen != null || player == null || mc.level == null) return;
+		if (player.getAttackStrengthScale(0f) < 0.95f) return;
 
 		var box = player.getBoundingBox().inflate(range.get() + 1.0);
 		Comparator<Entity> order = sort.is("Health")
@@ -34,6 +36,7 @@ public class KillAura extends Module {
 		Entity target = mc.level.getEntities(player, box).stream()
 			.filter(e -> Util.validTarget(player, e, targets.get()))
 			.filter(e -> Util.distanceToBox(player, e) <= range.get())
+			.filter(e -> !requireVisible.get() || player.hasLineOfSight(e))
 			.min(order)
 			.orElse(null);
 

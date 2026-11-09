@@ -11,20 +11,26 @@ public class ModuleManager {
 	private final List<Module> modules = new ArrayList<>();
 
 	public ModuleManager() {
+		// Combat
 		register(new KillAura());
 		register(new AimAssist());
 		register(new TriggerBot());
 		register(new AutoTotem());
+		register(new AntiBot());
 
+		// Movement
 		register(new Sprint());
 		register(new Fly());
 		register(new Scaffold());
+		register(new FastBridge());
 		register(new Step());
 
+		// Player
 		register(new AutoTool());
 		register(new ChestStealer());
 		register(new AutoRespawn());
 
+		// Visual / Render
 		register(new Fullbright());
 		register(new ESP());
 		register(new HudModule());

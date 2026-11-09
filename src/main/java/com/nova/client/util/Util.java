@@ -1,5 +1,8 @@
 package com.nova.client.util;
 
+import com.nova.client.NovaClient;
+import com.nova.client.module.Module;
+import com.nova.client.module.impl.AntiBot;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -21,9 +24,15 @@ public final class Util {
 		return Math.sqrt(dx * dx + dy * dy + dz * dz);
 	}
 
-	/** mode is one of "Players", "Mobs", "All". */
+	/** mode is one of "Players", "Mobs", "All". Also checks AntiBot if enabled. */
 	public static boolean validTarget(Entity self, Entity e, String mode) {
 		if (e == self || !(e instanceof LivingEntity le) || !le.isAlive()) return false;
+
+		// AntiBot filter: ignore fake server anti-cheat bots
+		if (NovaClient.modules != null && NovaClient.modules.get("Anti Bot").map(Module::isEnabled).orElse(false)) {
+			if (AntiBot.isBot(e)) return false;
+		}
+
 		boolean player = e instanceof Player p && !p.isSpectator();
 		boolean mob = e instanceof Mob;
 		return switch (mode) {
