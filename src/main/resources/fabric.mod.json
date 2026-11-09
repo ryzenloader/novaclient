@@ -8,7 +8,7 @@
   "icon": "assets/prestige/icons/logo.png",
   "environment": "client",
   "entrypoints": {
-    "client": ["com.nova.client.NovaClient"]
+    "client": ["dev.zprestige.prestige.Prestige"]
   },
   "depends": {
     "fabricloader": ">=0.18.0",
