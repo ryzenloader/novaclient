@@ -37,7 +37,7 @@ public class AntiBot extends Module {
 		// 1. Tablist check: Real players appear in the server tab list
 		if (tabList != null && tabList.get()) {
 			Collection<PlayerInfo> players = mc.getConnection().getOnlinePlayers();
-			boolean inTab = players.stream().anyMatch(info -> info.getProfile().getId().equals(player.getUUID()));
+			boolean inTab = players.stream().anyMatch(info -> info.getProfile().id().equals(player.getUUID()));
 			if (!inTab) return true;
 		}
 
