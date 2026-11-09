@@ -18,7 +18,8 @@ public final class SoundUtil {
 
 		Thread.ofVirtual().start(() -> {
 			try {
-				InputStream is = SoundUtil.class.getResourceAsStream("/assets/novaclient/sounds/" + soundName);
+				InputStream is = SoundUtil.class.getResourceAsStream("/assets/prestige/sounds/" + soundName);
+				if (is == null) is = SoundUtil.class.getResourceAsStream("/assets/novaclient/sounds/" + soundName);
 				if (is == null) return;
 				try (BufferedInputStream bis = new BufferedInputStream(is);
 					 AudioInputStream ais = AudioSystem.getAudioInputStream(bis)) {

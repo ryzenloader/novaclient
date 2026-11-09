@@ -36,18 +36,18 @@ public class NovaClient implements ClientModInitializer {
 
 		HudElementRegistry.attachElementBefore(
 			VanillaHudElements.CHAT,
-			Identifier.fromNamespaceAndPath("novaclient", "hud"),
+			Identifier.fromNamespaceAndPath("prestige", "hud"),
 			Hud::extract);
 
-		// Right Shift opens the click GUI (rebindable in Options > Controls)
+		// Right Shift opens the Prestige click GUI (rebindable in Options > Controls)
 		KeyMapping.Category category = KeyMapping.Category.register(
-			Identifier.fromNamespaceAndPath("novaclient", "main"));
+			Identifier.fromNamespaceAndPath("prestige", "main"));
 		openGui = KeyMappingHelper.registerKeyMapping(
-			new KeyMapping("key.novaclient.open_gui", GLFW.GLFW_KEY_RIGHT_SHIFT, category));
+			new KeyMapping("key.prestige.open_gui", GLFW.GLFW_KEY_RIGHT_SHIFT, category));
 
-		// One unbound key per module: set them in Options > Controls > Nova Client
+		// One unbound key per module: set them in Options > Controls > Prestige Client
 		for (Module m : modules.getModules()) {
-			String id = "key.novaclient.module." + m.getName().toLowerCase(Locale.ROOT).replace(' ', '_');
+			String id = "key.prestige.module." + m.getName().toLowerCase(Locale.ROOT).replace(' ', '_');
 			moduleKeys.put(m, KeyMappingHelper.registerKeyMapping(
 				new KeyMapping(id, GLFW.GLFW_KEY_UNKNOWN, category)));
 		}

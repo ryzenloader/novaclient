@@ -1,10 +1,11 @@
 {
   "schemaVersion": 1,
-  "id": "novaclient",
+  "id": "prestige",
   "version": "${version}",
   "name": "Prestige Client",
-  "description": "Prestige Client for Fabric Minecraft.",
-  "authors": ["You"],
+  "description": "Prestige Client for Fabric Minecraft 26.1.",
+  "authors": ["Prestige"],
+  "icon": "assets/prestige/icons/logo.png",
   "environment": "client",
   "entrypoints": {
     "client": ["com.nova.client.NovaClient"]
