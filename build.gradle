@@ -22,7 +22,7 @@ dependencies {
 
 	compileOnly "com.google.code.findbugs:jsr305:3.0.2"
 
-	implementation "com.github.weisj:jsvg:2.1.0"
+	include implementation("com.github.weisj:jsvg:2.1.0")
 	compileOnly "io.github.llamalad7:mixinextras-fabric:0.5.4"
 	annotationProcessor "io.github.llamalad7:mixinextras-fabric:0.5.4"
 }
@@ -36,6 +36,16 @@ processResources {
 	filesMatching("fabric.mod.json") {
 		expand "version": inputs.properties.version
 	}
+}
+
+tasks.named('jar', Jar) {
+	from(configurations.include.collect { zipTree(it) }) {
+		exclude "META-INF/MANIFEST.MF"
+		exclude "META-INF/*.SF"
+		exclude "META-INF/*.DSA"
+		exclude "META-INF/*.RSA"
+	}
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
 tasks.withType(JavaCompile).configureEach {
