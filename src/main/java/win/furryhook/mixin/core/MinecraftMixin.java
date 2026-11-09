@@ -38,7 +38,7 @@ public abstract class MinecraftMixin {
    public ClientLevel level;
 
    @Inject(method = "onGameLoadFinished", at = @At("TAIL"))
-   private void onClientStart(GameLoadCookie gameLoadCookie, CallbackInfo ci) {
+   private void onClientStart(CallbackInfo ci) {
       if (EventManager.hasListeners(ClientStartEvent.class)) {
          EventManager.call(Events.CLIENT_START.set((Minecraft)(Object)this));
       }

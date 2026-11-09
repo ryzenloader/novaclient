@@ -66,15 +66,7 @@ public abstract class LocalPlayerMixin {
       }
    }
 
-   @Redirect(method = "applyInput", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;getXRot()F"))
-   private float useCameraPitchForHandBob(LocalPlayer player) {
-      return this.minecraft.options.getCameraType().isFirstPerson() ? this.minecraft.gameRenderer.mainCamera().xRot() : player.getXRot();
-   }
 
-   @Redirect(method = "applyInput", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;getYRot()F"))
-   private float useCameraYawForHandBob(LocalPlayer player) {
-      return this.minecraft.options.getCameraType().isFirstPerson() ? this.minecraft.gameRenderer.mainCamera().yRot() : player.getYRot();
-   }
 
    @Inject(method = "getViewYRot", at = @At("HEAD"), cancellable = true)
    private void onGetViewYRot(float partialTick, CallbackInfoReturnable<Float> cir) {
