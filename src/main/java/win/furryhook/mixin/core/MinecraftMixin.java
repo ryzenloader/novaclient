@@ -1,6 +1,5 @@
 package win.furryhook.mixin.core;
 
-import net.minecraft.client.GameLoadCookie;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -131,7 +130,7 @@ public abstract class MinecraftMixin {
    }
 
    @Inject(method = "onResourceLoadFinished", at = @At("TAIL"))
-   private void onResourceReload(GameLoadCookie gameLoadCookie, CallbackInfo ci) {
+   private void onResourceReload(CallbackInfo ci) {
       if (EventManager.hasListeners(ResourceReloadEvent.class)) {
          EventManager.call(Events.RESOURCE_RELOAD.set((Minecraft)(Object)this));
       }

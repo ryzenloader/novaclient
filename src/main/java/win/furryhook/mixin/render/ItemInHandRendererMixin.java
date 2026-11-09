@@ -18,7 +18,6 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.At.Shift;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import win.furryhook.context.RotationContext;
@@ -138,23 +137,23 @@ public abstract class ItemInHandRendererMixin {
       }
    }
 
-   @Redirect(method = "submitHandsWithItems", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;getXRot(F)F"))
-   private float useFreeLookPitch(LocalPlayer player, float partialTick) {
+   @WrapOperation(method = "submitHandsWithItems", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;getXRot(F)F"))
+   private float useFreeLookPitch(LocalPlayer player, float partialTick, Operation<Float> original) {
       if (RotationContext.isActive()) {
          AuraFeature aura = FeatureManager.INSTANCE.getEnabled(AuraFeature.class);
-         return aura != null && aura.clientLook.getValue() ? player.getXRot(partialTick) : RotationContext.getFreePitch();
+         return aura != null && aura.clientLook.getValue() ? original.call(player, partialTick) : RotationContext.getFreePitch();
       } else {
-         return player.getXRot(partialTick);
+         return original.call(player, partialTick);
       }
    }
 
-   @Redirect(method = "submitHandsWithItems", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;getViewXRot(F)F"))
-   private float useCameraPitch(LocalPlayer player, float partialTick) {
+   @WrapOperation(method = "submitHandsWithItems", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;getViewXRot(F)F"))
+   private float useCameraPitch(LocalPlayer player, float partialTick, Operation<Float> original) {
       return this.minecraft.gameRenderer.mainCamera().xRot();
    }
 
-   @Redirect(method = "submitHandsWithItems", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;getViewYRot(F)F"))
-   private float useCameraYaw(LocalPlayer player, float partialTick) {
+   @WrapOperation(method = "submitHandsWithItems", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;getViewYRot(F)F"))
+   private float useCameraYaw(LocalPlayer player, float partialTick, Operation<Float> original) {
       return this.minecraft.gameRenderer.mainCamera().yRot();
    }
 }

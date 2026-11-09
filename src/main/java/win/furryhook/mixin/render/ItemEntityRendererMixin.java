@@ -13,7 +13,8 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import win.furryhook.feature.FeatureManager;
 import win.furryhook.feature.impl.visual.ItemPhysicsFeature;
@@ -33,7 +34,7 @@ public abstract class ItemEntityRendererMixin {
       ((ItemEntityRenderStateAccess)state).setOnGround(entity.onGround());
    }
 
-   @Redirect(
+   @WrapOperation(
       method = "submit(Lnet/minecraft/client/renderer/entity/state/ItemEntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/level/CameraRenderState;)V",
       at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;translate(FFF)V")
    )
@@ -42,30 +43,32 @@ public abstract class ItemEntityRendererMixin {
       float x,
       float y,
       float z,
+      Operation<Void> original,
       ItemEntityRenderState state,
       PoseStack poseStackArg,
       SubmitNodeCollector collector,
       CameraRenderState cameraState
    ) {
       if (!physicsApplies(state)) {
-         poseStack.translate(x, y, z);
+         original.call(poseStack, x, y, z);
       }
    }
 
-   @Redirect(
+   @WrapOperation(
       method = "submit(Lnet/minecraft/client/renderer/entity/state/ItemEntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/level/CameraRenderState;)V",
       at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;mulPose(Lorg/joml/Quaternionfc;)V")
    )
    private void applyPhysicsTransform(
       PoseStack poseStack,
       Quaternionfc spinRotation,
+      Operation<Void> original,
       ItemEntityRenderState state,
       PoseStack poseStackArg,
       SubmitNodeCollector collector,
       CameraRenderState cameraState
    ) {
       if (!physicsApplies(state)) {
-         poseStack.mulPose(spinRotation);
+         original.call(poseStack, spinRotation);
       } else {
          AABB box = state.item.getModelBoundingBox();
          float yaw = (state.seed % 360 + 360) % 360;
