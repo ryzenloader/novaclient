@@ -29,17 +29,10 @@ public final class MineProfiles {
          case "funtime" -> Optional.of(FUNTIME_MAIN);
          case "holyworld" -> nearestHolyWorld(playerPosition);
          case "none", "generic" -> Optional.empty();
-         default -> {
-            switch (detected) {
-               case FUNTIME:
-                  yield Optional.of(FUNTIME_MAIN);
-                  break;
-               case HOLYWORLD:
-                  yield nearestHolyWorld(playerPosition);
-                  break;
-               default:
-                  yield Optional.empty();
-            }
+         default -> switch (detected) {
+            case FUNTIME -> Optional.of(FUNTIME_MAIN);
+            case HOLYWORLD -> nearestHolyWorld(playerPosition);
+            default -> Optional.empty();
          }
       };
    }
