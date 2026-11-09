@@ -24,8 +24,6 @@ public abstract class Module {
 		public final String label;
 		Category(String label) { this.label = label; }
 	}
-	}
-	}
 
 	private final String name;
 	private final String description;
@@ -47,12 +45,14 @@ public abstract class Module {
 	public Category getCategory() { return category; }
 	public List<Setting> getSettings() { return Collections.unmodifiableList(settings); }
 	public boolean isEnabled() { return enabled; }
+
 	public void setEnabled(boolean value) {
 		if (enabled != value) {
 			enabled = value;
 			dev.zprestige.prestige.gui.Hud.toast(name, enabled);
 		}
 	}
+
 	public void toggle() {
 		setEnabled(!enabled);
 	}
@@ -75,9 +75,17 @@ public abstract class Module {
 		return s;
 	}
 
-	protected void onEnable() {}
-	protected void onDisable() {}
+	protected <T extends Setting> T addSetting(T s) {
+		settings.add(s);
+		return s;
+	}
 
-	/** Called every client tick while enabled and a world is loaded. */
+	/** Called each client tick when enabled. */
 	public void onTick() {}
+
+	/** Called once when the module is enabled (or on world join if enabled). */
+	protected void onEnable() {}
+
+	/** Called once when the module is disabled. */
+	protected void onDisable() {}
 }
