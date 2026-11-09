@@ -1,0 +1,9 @@
+{
+  "module_enable": { "sounds": ["furryhook:module_enable"] },
+  "module_disable": { "sounds": ["furryhook:module_disable"] },
+  "menu_open": { "sounds": ["furryhook:menu_open"] },
+  "menu_close": { "sounds": ["furryhook:menu_close"] },
+  "slider": { "sounds": ["furryhook:slider"] },
+  "ui_on": { "sounds": ["furryhook:ui_on"] },
+  "ui_off": { "sounds": ["furryhook:ui_off"] }
+}

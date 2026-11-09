@@ -1,19 +1,26 @@
 {
   "schemaVersion": 1,
-  "id": "prestige",
-  "version": "${version}",
-  "name": "Prestige Client",
-  "description": "Prestige Client for Fabric Minecraft 26.1.",
-  "authors": ["Prestige"],
-  "icon": "assets/prestige/icons/logo.png",
-  "environment": "client",
+  "id": "furryhook",
+  "version": "1.0-SNAPSHOT",
+  "name": "furryhook.win",
+  "description": "",
+  "authors": [],
+  "contact": {},
+  "license": "All-Rights-Reserved",
+  "icon": "assets/furryhook/icon.png",
+  "environment": "*",
   "entrypoints": {
-    "client": ["dev.zprestige.prestige.Prestige"]
+    "main": [
+      "win.furryhook.Furryhook"
+    ]
   },
+  "mixins": [
+    "furryhook.mixins.json"
+  ],
+  "accessWidener": "furryhook.accesswidener",
   "depends": {
-    "fabricloader": ">=0.18.0",
-    "minecraft": ">=26.1 <26.2",
-    "java": ">=25",
-    "fabric-api": "*"
+    "fabricloader": ">=0.19.3",
+    "fabric-api": "*",
+    "minecraft": "26.2"
   }
 }

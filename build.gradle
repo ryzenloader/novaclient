@@ -11,13 +11,22 @@ base {
 }
 
 repositories {
+	mavenCentral()
+	maven { url = "https://maven.fabricmc.net/" }
 }
 
 dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-	// 26.1 is unobfuscated: no mappings line, and implementation instead of modImplementation
 	implementation "net.fabricmc:fabric-loader:${project.loader_version}"
 	implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
+	implementation "com.github.weisj:jsvg:2.1.0"
+	implementation "io.github.llamalad7:mixinextras-fabric:0.4.1"
+	annotationProcessor "io.github.llamalad7:mixinextras-fabric:0.4.1"
+}
+
+loom {
+	accessWidenerPath = file("src/main/resources/furryhook.accesswidener")
 }
 
 processResources {
@@ -36,5 +45,4 @@ java {
 	toolchain {
 		languageVersion = JavaLanguageVersion.of(25)
 	}
-	withSourcesJar()
 }
