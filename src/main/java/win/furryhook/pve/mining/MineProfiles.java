@@ -33,7 +33,7 @@ public final class MineProfiles {
             case FUNTIME -> Optional.of(FUNTIME_MAIN);
             case HOLYWORLD -> nearestHolyWorld(playerPosition);
             default -> Optional.empty();
-         }
+         };
       };
    }
 
