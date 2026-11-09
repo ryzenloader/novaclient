@@ -14,10 +14,17 @@ public abstract class Module {
 	protected static final Minecraft mc = Minecraft.getInstance();
 
 	public enum Category {
-		COMBAT("Combat"), MOVEMENT("Movement"), PLAYER("Player"), RENDER("Visual");
+		COMBAT("Combat"),
+		MACE("Mace"),
+		MOVEMENT("Movement"),
+		PLAYER("Misc"),
+		SPEAR("Spear"),
+		RENDER("Visual");
 
 		public final String label;
 		Category(String label) { this.label = label; }
+	}
+	}
 	}
 
 	private final String name;
