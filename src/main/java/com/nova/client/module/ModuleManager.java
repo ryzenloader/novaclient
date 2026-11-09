@@ -17,6 +17,11 @@ public class ModuleManager {
 		register(new TriggerBot());
 		register(new AutoTotem());
 		register(new AntiBot());
+		register(new Velocity());
+		register(new WTap());
+		register(new Hitboxes());
+		register(new KeepSprint());
+		register(new AutoShield());
 
 		// Movement
 		register(new Sprint());
@@ -24,15 +29,20 @@ public class ModuleManager {
 		register(new Scaffold());
 		register(new FastBridge());
 		register(new Step());
+		register(new NoJumpDelay());
+		register(new Parkour());
 
 		// Player
 		register(new AutoTool());
 		register(new ChestStealer());
 		register(new AutoRespawn());
+		register(new FastPlace());
+		register(new NoFall());
 
 		// Visual / Render
 		register(new Fullbright());
 		register(new ESP());
+		register(new ItemESP());
 		register(new HudModule());
 	}
 

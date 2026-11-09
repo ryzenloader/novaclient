@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "id": "novaclient",
   "version": "${version}",
-  "name": "Nova Client",
-  "description": "Modular utility client for singleplayer and private servers.",
+  "name": "Prestige Client",
+  "description": "Prestige Client for Fabric Minecraft.",
   "authors": ["You"],
   "environment": "client",
   "entrypoints": {

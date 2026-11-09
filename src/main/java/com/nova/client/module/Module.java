@@ -40,8 +40,15 @@ public abstract class Module {
 	public Category getCategory() { return category; }
 	public List<Setting> getSettings() { return Collections.unmodifiableList(settings); }
 	public boolean isEnabled() { return enabled; }
-	public void setEnabled(boolean value) { enabled = value; }
-	public void toggle() { enabled = !enabled; }
+	public void setEnabled(boolean value) {
+		if (enabled != value) {
+			enabled = value;
+			com.nova.client.gui.Hud.toast(name, enabled);
+		}
+	}
+	public void toggle() {
+		setEnabled(!enabled);
+	}
 
 	protected BoolSetting bool(String name, boolean def) {
 		BoolSetting s = new BoolSetting(name, def);

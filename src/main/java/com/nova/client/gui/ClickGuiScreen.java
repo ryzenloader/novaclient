@@ -22,33 +22,32 @@ import java.util.Locale;
 import java.util.Set;
 
 /**
- * Sidebar GUI: category list on the left, search box on top, one row per module with a toggle switch.
- * Click a module's name to expand its settings. Mouse wheel scrolls the list.
- *
- * All visuals are drawn here. The clickable areas are invisible vanilla buttons laid over the rows,
- * so no raw mouse-event handling is needed.
+ * Prestige Client ClickGUI: Sleek dark theme, category sidebar, search filter,
+ * animated toggle pills, expandable settings accordion, and authentic sound effects.
  */
 public class ClickGuiScreen extends Screen {
-	private static final int SIDEBAR_W = 108;
-	private static final int MOD_H = 30;
+	private static final int SIDEBAR_W = 120;
+	private static final int MOD_H = 32;
 	private static final int SET_H = 22;
 	private static final int GAP = 4;
 
-	private static final int C_DIM = 0xA0000000;
-	private static final int C_BG = 0xF00B1020;
-	private static final int C_SIDEBAR = 0xF0070A16;
-	private static final int C_EDGE = 0xFF2B3A66;
-	private static final int C_ROW = 0xFF111830;
-	private static final int C_ROW_HOVER = 0xFF19234A;
-	private static final int C_SETTING = 0xFF0D1426;
-	private static final int C_ACCENT = 0xFF7C5CFF;
-	private static final int C_ACCENT_TEXT = 0xFFB89BFF;
-	private static final int C_SELECTED = 0xFF1B2450;
-	private static final int C_WHITE = 0xFFFFFFFF;
-	private static final int C_MUTED = 0xFF7E8AA6;
-	private static final int C_TRACK_OFF = 0xFF2A3350;
-	private static final int C_GREEN = 0xFF6EE79A;
-	private static final int C_RED = 0xFFFF7A7A;
+	// Prestige color palette (Vault theme)
+	private static final int C_DIM = 0xAA000000;
+	private static final int C_BG = 0xF5060818;
+	private static final int C_SIDEBAR = 0xF8080A1C;
+	private static final int C_EDGE = 0xFF2B2B5E;
+	private static final int C_ROW = 0xFF141830;
+	private static final int C_ROW_HOVER = 0xFF202249;
+	private static final int C_SETTING = 0xFF0E1224;
+	private static final int C_ACCENT = 0xFF7C6CFF;       // Prestige Violet
+	private static final int C_ACCENT_HOVER = 0xFFA696FF;
+	private static final int C_SELECTED = 0xFF1C2042;
+	private static final int C_WHITE = 0xFFF0F2FF;
+	private static final int C_MUTED = 0xFF9CA0BF;
+	private static final int C_HEADER_GRAY = 0xFF5A5F85;
+	private static final int C_TRACK_OFF = 0xFF1B2238;
+	private static final int C_GREEN = 0xFF4ADE80;
+	private static final int C_RED = 0xFFF87171;
 
 	private record Entry(Module module, Setting setting, int height) {}
 	private record Placed(Entry entry, int x, int y, int w) {}
@@ -67,7 +66,7 @@ public class ClickGuiScreen extends Screen {
 	private int listX, listY, listW, listH;
 
 	public ClickGuiScreen() {
-		super(Component.literal("Nova Client"));
+		super(Component.literal("Prestige Client"));
 	}
 
 	@Override
@@ -76,17 +75,17 @@ public class ClickGuiScreen extends Screen {
 		dynamic.clear();
 		placed.clear();
 
-		pw = Math.min(this.width - 24, 560);
-		ph = Math.min(this.height - 24, 340);
+		pw = Math.min(this.width - 24, 600);
+		ph = Math.min(this.height - 24, 380);
 		px = (this.width - pw) / 2;
 		py = (this.height - ph) / 2;
 		listX = px + SIDEBAR_W + 14;
 		listW = px + pw - 12 - listX;
-		listY = py + 70;
+		listY = py + 68;
 		listH = py + ph - 12 - listY;
 
-		search = new EditBox(this.font, px + pw - 12 - 170, py + 14, 170, 18, Component.literal("Search"));
-		search.setHint(Component.literal("Search modules"));
+		search = new EditBox(this.font, px + pw - 12 - 175, py + 14, 175, 18, Component.literal("Search"));
+		search.setHint(Component.literal("Search modules..."));
 		search.setValue(searchText);
 		search.setResponder(text -> {
 			searchText = text;
@@ -104,15 +103,15 @@ public class ClickGuiScreen extends Screen {
 				search.setValue("");
 				scroll = 0;
 				dirty = true;
-			}).bounds(px + 6, y, SIDEBAR_W - 12, 24).build();
+			}).bounds(px + 6, y, SIDEBAR_W - 12, 26).build();
 			b.setAlpha(0f);
 			addRenderableWidget(b);
-			y += 28;
+			y += 30;
 		}
 		dirty = true;
 	}
 
-	private int sidebarTop() { return py + 62; }
+	private int sidebarTop() { return py + 68; }
 
 	private List<Module> visibleModules() {
 		String q = searchText.trim().toLowerCase(Locale.ROOT);
@@ -148,8 +147,8 @@ public class ClickGuiScreen extends Screen {
 			if (y + e.height() > listY + listH) break;
 
 			boolean isSetting = e.setting() != null;
-			int x = isSetting ? listX + 14 : listX;
-			int w = isSetting ? listW - 14 : listW;
+			int x = isSetting ? listX + 12 : listX;
+			int w = isSetting ? listW - 12 : listW;
 			placed.add(new Placed(e, x, y, w));
 
 			if (!isSetting) addModuleButtons(e.module(), x, y, w);
@@ -164,15 +163,19 @@ public class ClickGuiScreen extends Screen {
 		Button main = Button.builder(Component.empty(), b -> {
 			if (hasSettings) {
 				if (!expanded.remove(m)) expanded.add(m);
+				SoundUtil.play("dropdown.wav");
 			} else {
 				m.toggle();
+				SoundUtil.play(m.isEnabled() ? "pop.wav" : "pop2.wav");
 			}
 			dirty = true;
-		}).bounds(x, y, w - 54, MOD_H).build();
+		}).bounds(x, y, w - 50, MOD_H).build();
+
 		Button toggle = Button.builder(Component.empty(), b -> {
 			m.toggle();
 			SoundUtil.play(m.isEnabled() ? "pop.wav" : "pop2.wav");
-		}).bounds(x + w - 50, y, 50, MOD_H).build();
+		}).bounds(x + w - 46, y, 46, MOD_H).build();
+
 		track(main);
 		track(toggle);
 	}
@@ -240,17 +243,20 @@ public class ClickGuiScreen extends Screen {
 			else drawSetting(g, p, mx, my);
 		}
 		if (placed.isEmpty()) {
-			g.text(this.font, "No modules found", listX + 4, listY + 6, C_MUTED, false);
+			g.text(this.font, "No modules found matching search", listX + 4, listY + 8, C_MUTED, false);
 		}
 
 		super.extractRenderState(g, mx, my, partialTick);
 	}
 
 	private void drawSidebar(GuiGraphicsExtractor g, int mx, int my) {
-		g.text(this.font, "Nova", px + 12, py + 12, C_ACCENT_TEXT, true);
-		g.text(this.font, "Client", px + 12 + this.font.width("Nova "), py + 12, C_WHITE, true);
-		g.text(this.font, "RELEASE 1.0", px + 12, py + 24, C_MUTED, false);
-		g.text(this.font, "MODULES", px + 12, py + 48, C_MUTED, false);
+		// Prestige Header
+		g.text(this.font, "PRESTIGE", px + 12, py + 14, C_ACCENT, true);
+		g.text(this.font, "Client", px + 12 + this.font.width("PRESTIGE "), py + 14, C_WHITE, true);
+		g.text(this.font, "RELEASE 4.4.0 · FABRIC 26.1", px + 12, py + 26, C_MUTED, false);
+
+		// Category label
+		g.text(this.font, "MODULES", px + 12, py + 52, C_HEADER_GRAY, false);
 
 		int y = sidebarTop();
 		boolean searching = !searchText.trim().isEmpty();
@@ -258,17 +264,19 @@ public class ClickGuiScreen extends Screen {
 			int x = px + 6;
 			int w = SIDEBAR_W - 12;
 			boolean isSelected = c == selected && !searching;
-			boolean hover = inside(mx, my, x, y, w, 24);
+			boolean hover = inside(mx, my, x, y, w, 26);
+
 			if (isSelected) {
-				g.fill(x, y, x + w, y + 24, C_SELECTED);
-				g.fill(x, y, x + 2, y + 24, C_ACCENT);
+				g.fill(x, y, x + w, y + 26, C_SELECTED);
+				g.fill(x, y, x + 3, y + 26, C_ACCENT);
 			} else if (hover) {
-				g.fill(x, y, x + w, y + 24, C_ROW);
+				g.fill(x, y, x + w, y + 26, C_ROW);
 			}
-			g.text(this.font, c.label, x + 10, y + 8, isSelected ? C_WHITE : C_MUTED, false);
+
+			g.text(this.font, c.label, x + 10, y + 9, isSelected ? C_WHITE : C_MUTED, false);
 			String count = Integer.toString(NovaClient.modules.getModules(c).size());
-			g.text(this.font, count, x + w - 8 - this.font.width(count), y + 8, C_MUTED, false);
-			y += 28;
+			g.text(this.font, count, x + w - 8 - this.font.width(count), y + 9, isSelected ? C_ACCENT : C_HEADER_GRAY, false);
+			y += 30;
 		}
 	}
 
@@ -278,13 +286,13 @@ public class ClickGuiScreen extends Screen {
 		long on = shown.stream().filter(Module::isEnabled).count();
 
 		if (searching) {
-			g.text(this.font, "Search results", listX, py + 16, C_WHITE, true);
+			g.text(this.font, "Search Results", listX, py + 16, C_WHITE, true);
 		} else {
-			g.text(this.font, selected.label, listX, py + 16, C_ACCENT_TEXT, true);
+			g.text(this.font, selected.label, listX, py + 16, C_ACCENT, true);
 			g.text(this.font, " Modules", listX + this.font.width(selected.label), py + 16, C_WHITE, true);
 		}
 		g.text(this.font, shown.size() + " modules · " + on + " enabled", listX, py + 30, C_MUTED, false);
-		g.text(this.font, "Click a name for settings · scroll for more · Esc to close", listX, py + 48, C_MUTED, false);
+		g.text(this.font, "Click module name to expand settings · Esc to close", listX, py + 48, C_HEADER_GRAY, false);
 	}
 
 	private void drawModule(GuiGraphicsExtractor g, Placed p, int mx, int my) {
@@ -292,19 +300,24 @@ public class ClickGuiScreen extends Screen {
 		int x = p.x(), y = p.y(), w = p.w();
 		boolean hover = inside(mx, my, x, y, w, MOD_H);
 
+		// Card Background
 		g.fill(x, y, x + w, y + MOD_H, hover ? C_ROW_HOVER : C_ROW);
 		g.outline(x, y, w, MOD_H, C_EDGE);
-		if (m.isEnabled()) g.fill(x, y, x + 2, y + MOD_H, C_ACCENT);
+		if (m.isEnabled()) g.fill(x, y, x + 3, y + MOD_H, C_ACCENT);
 
+		// Module Name & Description
 		g.text(this.font, m.getName(), x + 10, y + 6, C_WHITE, false);
-		g.text(this.font, m.getDescription(), x + 10, y + 18, C_MUTED, false);
+		g.text(this.font, m.getDescription(), x + 10, y + 19, C_MUTED, false);
 
+		// Expand chevron
 		if (!m.getSettings().isEmpty()) {
-			g.text(this.font, expanded.contains(m) ? "v" : ">", x + w - 66, y + 11, C_MUTED, false);
+			String chev = expanded.contains(m) ? "▼" : "▶";
+			g.text(this.font, chev, x + w - 58, y + 12, expanded.contains(m) ? C_ACCENT : C_MUTED, false);
 		}
 
-		int tx = x + w - 40;
-		int ty = y + 9;
+		// Prestige Toggle Switch Pill
+		int tx = x + w - 38;
+		int ty = y + 10;
 		g.fill(tx, ty, tx + 28, ty + 12, m.isEnabled() ? C_ACCENT : C_TRACK_OFF);
 		int knobX = m.isEnabled() ? tx + 28 - 11 : tx + 1;
 		g.fill(knobX, ty + 1, knobX + 10, ty + 11, C_WHITE);
@@ -315,7 +328,8 @@ public class ClickGuiScreen extends Screen {
 		int x = p.x(), y = p.y(), w = p.w();
 		boolean hover = inside(mx, my, x, y, w, SET_H);
 
-		g.fill(x, y, x + w, y + SET_H, hover ? C_ROW : C_SETTING);
+		g.fill(x, y, x + w, y + SET_H, hover ? C_ROW_HOVER : C_SETTING);
+		g.outline(x, y, w, SET_H, 0xFF1F243E);
 		g.text(this.font, s.name, x + 10, y + 7, C_MUTED, false);
 
 		if (s instanceof NumberSetting ns) {
@@ -325,16 +339,16 @@ public class ClickGuiScreen extends Screen {
 			int center = x + w - 74 + 20 + (30 / 2);
 			g.text(this.font, v, center - this.font.width(v) / 2, y + 7, C_WHITE, false);
 		} else if (s instanceof BoolSetting bs) {
-			String v = bs.display();
-			g.text(this.font, v, x + w - 10 - this.font.width(v), y + 7, bs.get() ? C_GREEN : C_RED, false);
+			String v = bs.get() ? "ON" : "OFF";
+			g.text(this.font, v, x + w - 10 - this.font.width(v), y + 7, bs.get() ? C_GREEN : C_RED, true);
 		} else {
 			String v = s.display();
-			g.text(this.font, v, x + w - 10 - this.font.width(v), y + 7, C_ACCENT_TEXT, false);
+			g.text(this.font, v, x + w - 10 - this.font.width(v), y + 7, C_ACCENT, false);
 		}
 	}
 
 	private void drawStepper(GuiGraphicsExtractor g, int x, int y, String label) {
-		g.fill(x, y, x + 20, y + SET_H - 4, C_ROW_HOVER);
+		g.fill(x, y, x + 20, y + SET_H - 4, C_ROW);
 		g.outline(x, y, 20, SET_H - 4, C_EDGE);
 		g.text(this.font, label, x + 10 - this.font.width(label) / 2, y + 5, C_WHITE, false);
 	}

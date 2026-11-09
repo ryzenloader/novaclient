@@ -72,35 +72,39 @@ public class NovaClient implements ClientModInitializer {
 			if (mc.player != null && mc.level != null) modules.tick();
 		});
 
-		// /nova list            -> show all modules and their state
-		// /nova toggle <name>   -> toggle a module
-		ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) ->
-			dispatcher.register(ClientCommands.literal("nova")
-				.then(ClientCommands.literal("list").executes(ctx -> {
-					for (Module m : modules.getModules()) {
-						ctx.getSource().sendFeedback(Component.literal(
-							(m.isEnabled() ? "[ON]  " : "[OFF] ") + m.getName() + "  (" + m.getCategory().label + ")"));
-					}
-					return 1;
-				}))
-				.then(ClientCommands.literal("toggle")
-					.then(ClientCommands.argument("module", StringArgumentType.greedyString())
-						.suggests((c, b) -> {
-							modules.getModules().forEach(m -> b.suggest(m.getName()));
-							return b.buildFuture();
-						})
-						.executes(ctx -> {
-							String name = StringArgumentType.getString(ctx, "module");
-							return modules.get(name).map(m -> {
-								m.toggle();
-								ConfigManager.save(modules);
-								ctx.getSource().sendFeedback(Component.literal(
-									m.getName() + " " + (m.isEnabled() ? "enabled" : "disabled")));
-								return 1;
-							}).orElseGet(() -> {
-								ctx.getSource().sendError(Component.literal("Unknown module: " + name));
-								return 0;
-							});
-						})))));
+		// /nova and /prestige commands:
+		//   list            -> show all modules and their state
+		//   toggle <name>   -> toggle a module
+		ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
+			for (String cmdName : new String[]{"nova", "prestige"}) {
+				dispatcher.register(ClientCommands.literal(cmdName)
+					.then(ClientCommands.literal("list").executes(ctx -> {
+						for (Module m : modules.getModules()) {
+							ctx.getSource().sendFeedback(Component.literal(
+								(m.isEnabled() ? "§a[ON]  §f" : "§c[OFF] §7") + m.getName() + "  §8(" + m.getCategory().label + ")"));
+						}
+						return 1;
+					}))
+					.then(ClientCommands.literal("toggle")
+						.then(ClientCommands.argument("module", StringArgumentType.greedyString())
+							.suggests((c, b) -> {
+								modules.getModules().forEach(m -> b.suggest(m.getName()));
+								return b.buildFuture();
+							})
+							.executes(ctx -> {
+								String name = StringArgumentType.getString(ctx, "module");
+								return modules.get(name).map(m -> {
+									m.toggle();
+									ConfigManager.save(modules);
+									ctx.getSource().sendFeedback(Component.literal(
+										"§7[Prestige] §f" + m.getName() + (m.isEnabled() ? " §aenabled" : " §cdisabled")));
+									return 1;
+								}).orElseGet(() -> {
+									ctx.getSource().sendError(Component.literal("Unknown module: " + name));
+									return 0;
+								});
+							}))));
+			}
+		});
 	}
 }
